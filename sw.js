@@ -1,10 +1,10 @@
-const cacheName = 'taj-calc-v20'; 
+const cacheName = 'taj-calc-v21'; // Version update kar diya
 const assets = [
   './',
   './index.html',
   './style.css',
   './script.js',
-  './ramadan.js', // Isay lazmi shamil karein warna offline nahi chalega
+  './ramadan.js',
   './manifest.json',
   './logo.png'
 ];
@@ -14,12 +14,13 @@ self.addEventListener('install', e => {
   self.skipWaiting(); 
   e.waitUntil(
     caches.open(cacheName).then(cache => {
+      console.log('Taj-System: Files Cached Successfully');
       return cache.addAll(assets);
     })
   );
 });
 
-// 2. Activate Event
+// 2. Activate Event (Purana cache saaf karne ke liye)
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys => {
@@ -28,45 +29,49 @@ self.addEventListener('activate', e => {
       );
     })
   );
+  return self.clients.claim();
 });
 
-// 3. Fetch Event
+// 3. Fetch Event (Sahi logic: Pehle Cache check karo)
 self.addEventListener('fetch', e => {
   e.respondWith(
-    fetch(e.request).catch(() => {
-      return caches.match(e.request);
+    caches.match(e.request).then(cachedResponse => {
+      // Agar cache mein file hai to wahi se do (Fastest)
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      // Agar cache mein nahi hai, tab network se mangwao
+      return fetch(e.request);
+    }).catch(() => {
+      // Agar dono fail ho jayen (Offline & Not in cache), to index return karo
+      if (e.request.mode === 'navigate') {
+        return caches.match('./index.html');
+      }
     })
   );
 });
 
-// 4. Notification Click Fix: Sab se important fix yahan hai
+// 4. Notification Click (Same as your code)
 self.addEventListener('notificationclick', e => {
   e.notification.close(); 
-  
   e.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
       for (const client of clientList) {
-        if (client.url.includes('/') && 'focus' in client) {
-          return client.focus();
-        }
+        if (client.url.includes('/') && 'focus' in client) return client.focus();
       }
-      if (clients.openWindow) {
-        return clients.openWindow('./');
-      }
+      if (clients.openWindow) return clients.openWindow('./');
     })
   );
 });
 
-// 5. Push Notification Fix: Icons ke path check karein
+// 5. Push Notification (Same as your code)
 self.addEventListener('push', e => {
   const data = e.data ? e.data.json() : {};
-  const title = data.title || "Taj Calculator Alert";
   const options = {
     body: data.body || "Time is Completed Now!",
-    icon: './ramadan-icon.png', // Aapka ramadan icon
-    badge: './ramadan-icon.png',
-    tag: 'ramadan-live-alert', // Same tag taake notifications dher na hon
-    renotify: false
+    icon: './logo.png', // Logo path check karein
+    badge: './logo.png',
+    tag: 'ramadan-live-alert'
   };
-  e.waitUntil(self.registration.showNotification(title, options));
+  e.waitUntil(self.registration.showNotification(data.title || "Taj Alert", options));
 });
