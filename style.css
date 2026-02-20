@@ -1,0 +1,353 @@
+
+        /* Default (White/Light Mode) */
+        :root { 
+            --bg: #000000; 
+            --text: #ffffff; 
+            --btn-bg: #1c1c1c; 
+            --nav-text: #888888; 
+            --accent: #ff9500; 
+            --border: #2c2c2e;
+            --card-bg: #0a0a0a;
+        }
+
+        html, body { height: 100%; margin: 0; padding: 0; background: var(--bg); overflow: hidden; font-family: sans-serif; }
+
+        .app-container { 
+            width: 100%; max-width: 450px; display: flex; flex-direction: column; 
+            height: 100vh; margin: auto; position: relative; 
+        }
+
+        /* Nav Tabs */
+        .nav { 
+            display: flex; justify-content: space-around; align-items: center; 
+            padding: 10px; font-size: 1.1rem; flex-shrink: 0; position: relative; z-index: 1000; 
+        }
+
+        .nav span { color: var(--nav-text); cursor: pointer; padding-bottom: 5px; }
+        .nav span.active { color: var(--text); border-bottom: 2px solid var(--accent); }
+
+        /* Views */
+        .view { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+        .view.active { display: flex; }
+
+        .display-box { padding: 15px 25px; text-align: right; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; }
+ #calculation-line {
+    width: 100%;
+    font-size: 1.6rem;
+    color: #bbb;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    text-align: right;
+    padding: 10px 0;
+    caret-color: #ff9f0a;
+    font-family: inherit;
+    
+    /* MULTI-LINE LOOK KE LIYE YE ZAROORI HAI */
+    white-space: normal; 
+    word-break: break-all;
+    display: block;
+    height: auto; 
+    max-height: 100px; /* Is se zyada lambi ho to scroll bar aaye */
+    overflow-y: auto;
+}
+
+
+        #answer-line { font-size: 2.2rem; color: #fff; min-height: 3.2rem; transition: all 0.2s ease; word-break: break-all; line-height: 1; }
+        .final-answer { font-size: 2.4rem !important; font-weight: bold !important; }
+
+        .pad { background: #000; padding: 10px 15px 25px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex-shrink: 0; }
+        .btn { 
+            height: 55px; border-radius: 9px; font-size: 1.9rem; border: none; 
+            background: #1e1e1e; color: white; display: flex; align-items: center; 
+            justify-content: center; position: relative; transition: all 0.05s ease; 
+            box-shadow: 0 4px 0 #000; cursor: pointer; 
+        }
+.btn:active, .op:active, .ac:active, .eq:active, .btn:active{ 
+    transform: translateY(3px); 
+    box-shadow: 0 0 0 #000; 
+    opacity: 0.8; 
+}
+
+
+        .op { color: var(--accent) !important; font-weight: bold; }
+        .ac { color: #ff4444 !important; }
+        .eq { background: var(--accent) !important; color: #fff !important; border-radius: 90px; }
+
+        /* Converter Styling */
+        .conv-container { padding: 20px; overflow-y: auto; flex: 1; background: #000; }
+        .conv-card { background: #111; border-radius: 15px; padding: 15px; margin-bottom: 15px; border: 1px solid #222; }
+        .conv-label { color: var(--accent); font-size: 0.8rem; margin-bottom: 8px; display: block; letter-spacing: 1px; }
+        .conv-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .conv-input { background: #222; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-size: 1.1rem; width: 60%; }
+        .conv-select { background: #333; border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.9rem; width: 40%; }
+        .rate-info { color: #666; font-size: 0.75rem; margin-top: 5px; }
+
+        /* --- History Panel Final Fix --- */
+#history-panel { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: var(--bg) !important; 
+    display: none; 
+    flex-direction: column; 
+    z-index: 9999 !important; 
+}
+
+/* Header ka background aur border fix */
+.hist-header { 
+    display: flex; 
+    align-items: center; 
+    padding: 15px; 
+    background: var(--bg); 
+    border-bottom: 1px solid var(--border);
+}
+
+/* Title (History) jo beech mein hota hai */
+.hist-header span { 
+    color: var(--text) !important; /* Ye white mode mein black aur dark mein white hoga */
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Back button aur Edit button hamesha orange rahen gay */
+.hist-header span[onclick*="closeHistory"], 
+#edit-btn { 
+    color: var(--accent) !important; 
+    cursor: pointer;
+    flex: 0; /* Buttons ko apni jagah rakhne ke liye */
+}
+
+/* Title ko center karne ke liye */
+.hist-header span:nth-child(2) {
+    flex: 1;
+    text-align: center;
+}
+
+#history-list {
+    background: var(--bg);
+    flex: 1;
+    overflow-y: auto;
+}
+        
+        .date-header-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding: 10px 0; border-top: 1px solid #1a1a1a; }
+        .date-label { color: #666; font-size: 0.9rem; }
+        .history-card { background: #0a0a0a; border-radius: 12px; margin-bottom: 15px; padding: 12px; border: 1px solid #111; }
+        .history-card.selected { border-color: var(--accent); background: #151005; }
+        .card-main { display: flex; align-items: flex-start; }
+        .select-checkbox { width: 22px; height: 22px; accent-color: var(--accent); margin-right: 15px; display: none; margin-top: 10px;}
+        .card-content { flex-grow: 1; text-align: right; }
+        .hist-exp-text { color: #888; font-size: 1.2rem; margin-bottom: 8px; }
+        .hist-res-text { color: #fff; font-size: 1.6rem; font-weight: bold; }
+        .card-actions { display: flex; justify-content: flex-end; gap: 15px; margin-top: 10px; border-top: 1px solid #1a1a1a; padding-top: 8px; }
+        .action-btn { background: none; border: none; color: var(--accent); font-size: 0.85rem; cursor: pointer; }
+        .history-footer { display: none; padding: 20px 15px 35px; background: #0a0a0a; border-top: 1px solid #222; justify-content: space-between; align-items: center; }
+        .footer-btn { background: none; border: none; color: #fff; font-size: 1rem; cursor: pointer; }
+        .footer-btn.delete-main { color: #ff4444; font-weight: bold; }
+
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 10000;
+            transition: opacity 0.5s ease, visibility 0.5s; text-align: center;
+        }
+    .business-logo {
+            width: 200px; /* Logo ka size yahan se chota-bara karen */
+            height: auto;
+            margin-bottom: 50px; /* Logo aur text ke darmiyan gap */
+            border-radius: 10%; /* Agar logo round chahiye to */
+}
+
+        .shop-name { color: var(--accent); font-size: 2.2rem; font-weight: bold; margin-bottom: 15px; }
+        .whatsapp-box { display: flex; align-items: center; gap: 10px; background: #1c1c1c; padding: 10px 20px; border-radius: 50px; margin-bottom: 15px; border: 1px solid #333; }
+        .phone-num { color: #fff; font-size: 1.2rem; }
+        .address-text { color: #888; font-size: 0.9rem; }
+        /* 3 Dots Styling */
+.more-options {
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0 10px;
+    color: var(--nav-text);
+}
+
+/* Pop-up Overlay */
+.popup-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: none; /* Shuru mein chhupa hua */
+    justify-content: center;
+    align-items: center;
+    z-index: 11000;
+}
+
+/* Pop-up Box */
+.popup-box {
+    background: #1c1c1c;
+    width: 250px;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #333;
+    text-align: center;
+    color: white;
+}
+#install-btn {
+    background: linear-gradient(135deg, #ff9500, #ff5e00);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 149, 0, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 auto;
+}
+
+#install-btn:active {
+    transform: scale(0.95);
+}
+
+#install-btn i {
+    font-style: normal;
+    font-size: 20px;
+}
+
+/* Splash Screen ka Main Container */
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000; /* Screenshot ke mutabiq black background */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    font-family: sans-serif;
+    color: white;
+}
+
+/* Shop Name Settings */
+#shop-name-id {
+    text-align: center;
+    margin-bottom: 40px; /* Space niche wale box ke liye */
+}
+
+#shop-name-id::before {
+    content: attr(data-text);
+    white-space: pre;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #f29741; /* Orange/Gold shade */
+    line-height: 1.2;
+}
+
+
+
+/* WhatsApp Box (Pill Shape) */
+#whatsapp-id {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1e1e1e; /* Dark grey box */
+    padding: 12px 25px;
+    border-radius: 50px; /* Pill shape */
+    border: 1px solid #333;
+    margin-bottom: 25px;
+    min-width: 200px;
+}
+
+/* WhatsApp Icon */
+#whatsapp-id::before {
+    content: "";
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 1px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2325D366'%3E%3Cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.659 1.432 5.631 1.433h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* WhatsApp Number */
+#whatsapp-id::after {
+    content: attr(data-num);
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* Address Box */
+#address-id {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #bbbbbb;
+}
+
+/* Address Icon (Location Pin) */
+#address-id::before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f29741'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-12-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z'/%3E%3C/svg%3E");
+    background-size: contain;
+    color: #f29741;
+    background-repeat: no-repeat;
+}
+
+#address-id::after {
+    content: attr(data-addr);
+}
+
+/* 1. Popup Title */
+#popup-title::before {
+    content: "App Info";
+    color: #f29741;
+}
+
+/* 2. Developer Details */
+#dev-info::before { content: "Developer: "; font-weight: bold; }
+#dev-info::after { content: attr(data-dev); color: #bbb; }
+
+/* 3. WhatsApp Information */
+#wa-info::before { content: "WhatsApp: "; font-weight: bold; }
+#wa-info::after { 
+    content: attr(data-wa);
+    color: #fff; 
+    cursor: pointer; 
+    text-decoration: underline; 
+}
+
+/* 4. Version Details */
+#version-info::before { content: "Version: "; font-weight: bold; }
+#version-info::after { content: attr(data-ver); color: #bbb; }
+
+/* 5. Mobile Install Icon (Professional Gold SVG) */
+#install-icon-id::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    /* Professional Mobile SVG - Gold Color */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f29741'%3E%3Cpath d='M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: block;
+}
+
+/* 6. Button Texts */
+#install-text-id::before { content: attr(data-ins);}
+#close-popup-btn::before { content: "Close"; }
