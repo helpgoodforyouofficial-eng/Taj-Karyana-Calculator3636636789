@@ -1,4 +1,4 @@
-const cacheName = 'taj-calc-v12'; 
+const cacheName = 'taj-calc-v20'; 
 const assets = [
   './',
   './index.html',
@@ -70,3 +70,4 @@ self.addEventListener('push', e => {
   };
   e.waitUntil(self.registration.showNotification(title, options));
 });
+
