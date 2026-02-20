@@ -1,26 +1,34 @@
-const cacheName = 'taj-calc-v21'; // Version update kar diya
+const cacheName = 'taj-calc-v26'; // Version updated for fresh sync
 const assets = [
   './',
   './index.html',
   './style.css',
   './script.js',
-  './ramadan.js',
+  './ramadan-calender.js',
   './manifest.json',
-  './logo.png'
+  './logo.png',   // Logo download list mein shamil
+  './icon.png'    // Icon download list mein shamil
 ];
 
-// 1. Install Event
+// 1. Install Event: Sab kuch download karlo
 self.addEventListener('install', e => {
-  self.skipWaiting(); 
+  self.skipWaiting();
   e.waitUntil(
     caches.open(cacheName).then(cache => {
-      console.log('Taj-System: Files Cached Successfully');
-      return cache.addAll(assets);
+      console.log('Taj-System: Caching Images & Files...');
+      return Promise.all(
+        assets.map(url => {
+          return fetch(url).then(response => {
+            if (!response.ok) throw new Error('File not found: ' + url);
+            return cache.put(url, response);
+          }).catch(err => console.log('Offline Alert: ', err.message));
+        })
+      );
     })
   );
 });
 
-// 2. Activate Event (Purana cache saaf karne ke liye)
+// 2. Activate: Purana cache clear
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys => {
@@ -32,46 +40,24 @@ self.addEventListener('activate', e => {
   return self.clients.claim();
 });
 
-// 3. Fetch Event (Sahi logic: Pehle Cache check karo)
+// 3. Fetch: Instant Offline Access
 self.addEventListener('fetch', e => {
   e.respondWith(
     caches.match(e.request).then(cachedResponse => {
-      // Agar cache mein file hai to wahi se do (Fastest)
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      // Agar cache mein nahi hai, tab network se mangwao
-      return fetch(e.request);
+      // Agar cache mein file mil gayi (logo/icon/html), to internet ki zarurat nahi
+      if (cachedResponse) return cachedResponse;
+
+      return fetch(e.request).then(networkResponse => {
+        if(networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(cacheName).then(cache => cache.put(e.request, responseClone));
+        }
+        return networkResponse;
+      });
     }).catch(() => {
-      // Agar dono fail ho jayen (Offline & Not in cache), to index return karo
-      if (e.request.mode === 'navigate') {
-        return caches.match('./index.html');
-      }
+        if (e.request.mode === 'navigate') {
+          return caches.match('./index.html');
+        }
     })
   );
-});
-
-// 4. Notification Click (Same as your code)
-self.addEventListener('notificationclick', e => {
-  e.notification.close(); 
-  e.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-      for (const client of clientList) {
-        if (client.url.includes('/') && 'focus' in client) return client.focus();
-      }
-      if (clients.openWindow) return clients.openWindow('./');
-    })
-  );
-});
-
-// 5. Push Notification (Same as your code)
-self.addEventListener('push', e => {
-  const data = e.data ? e.data.json() : {};
-  const options = {
-    body: data.body || "Time is Completed Now!",
-    icon: './logo.png', // Logo path check karein
-    badge: './logo.png',
-    tag: 'ramadan-live-alert'
-  };
-  e.waitUntil(self.registration.showNotification(data.title || "Taj Alert", options));
 });
