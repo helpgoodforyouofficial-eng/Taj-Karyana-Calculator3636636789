@@ -1,320 +1,246 @@
-/* --- TAJ-SYSTEM SECURITY OVERLAY --- */
-(function() {
-    const _0xSEC = "DEBUG_ACTIVE";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <link rel="stylesheet" href="style.css">
+    <title>HM ERP Calculator</title>
     
-    // Universal Block (Right Click & Shortcuts)
-    const blockAction = (e) => {
-        e.preventDefault();
-        return false;
-    };
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 
-    document.addEventListener('contextmenu', blockAction);
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff9500">
+<link rel="apple-touch-icon" href="icon.png">
     
-    document.addEventListener('keydown', function(e) {
-        // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S
-        if (e.keyCode === 123 || 
-            (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || 
-            (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83))) {
-            return blockAction(e);
-        }
-    });
 
-    // The Ultimate "Debugger Trap"
-    setInterval(function() {
-        (function(_0xdb) {
-            if (_0xdb) {
-                (function() {
-                    const _h = function() {
-                        return 'debugger';
-                    };
-                    return _h();
-                }['constructor'](_h())['call']());
-            }
-        })(true);
-    }, 40); // 40ms is extremely fast, freezing the inspector
+</head>
+<body>
 
-    // Anti-Console Stealth
-    setInterval(() => {
-        console.clear();
-        console.log("%c⚠️ ACCESS DENIED", "color:yellow; background:red; font-size:40px; padding:20px;");
-    }, 500);
-})();
+<div id="splash-screen">
+    <img src="logo.png" alt="Business Logo" class="business-logo">
+    <div id="shop-name-id" class="shop-name"></div>
+    <div id="whatsapp-id" class="whatsapp-box"></div>
+    <div id="address-id" class="address-text"></div>
+</div>
 
 
-// --- GLOBAL DECOY VARIABLES ---
-const _0x92a1 = ["\x63\x6F\x6C\x6F\x72", "\x64\x69\x73\x70\x6C\x61\x79", "\x62\x61\x63\x6B\x67\x72\x6F\x75\x6E\x64"];
-const _CORE_INTEGRITY = 0x992AC1;
-let _temp_buffer_data = [];
+<div class="app-container">
+    <div class="nav">
+    <span id="tab-calc" class="active" onclick="switchView('calc')">Calculator</span>
+    <span id="tab-conv" onclick="switchView('conv')">Converter</span>
+    <span class="history-trigger" onclick="openHistory()">History</span>
+    <span class="more-options" onclick="togglePopup()">&#8942;</span> </div>
 
-// --- JUNK FUNCTION 1: Fake Mathematical Entropy ---
-function _calculateDataEntropy(val) {
-    let entropy = 0;
-    for (let i = 0; i < val.length; i++) {
-        entropy += val.charCodeAt(i) * Math.PI / _CORE_INTEGRITY;
-    }
-    return btoa(entropy.toString());
-}
 
-// --- JUNK FUNCTION 2: Fake Validation ---
-function _validateSystemCluster() {
-    const _check = [window.navigator.userAgent, window.location.href];
-    if (_check[0].length < 1) return false;
-    return !!_check[1];
-}
 
-// ORIGINAL LOGIC START (Hidden inside bloated structure)
-const isRamadanMode = true; 
-
-function initRamadanFeature() {
-    // Redundant checks
-    if (!_validateSystemCluster() || !isRamadanMode) { console.warn("System Cluster Sync Pending..."); return; }
-    
-    const nav = document.querySelector('.nav');
-    if (!nav) return;
-
-    // Obfuscating the style strings
-    const ramadanBtn = document.createElement('span');
-    ramadanBtn.id = "tab-ramadan";
-    ramadanBtn.innerHTML = "🌙";
-    
-    // Bloating the CSS via JS
-    const _s = ramadanBtn.style;
-    _s.color = "#f29741";
-    _s.fontSize = "1.2rem";
-    _s.cursor = "pointer";
-    _s.padding = "0 15px";
-    _s.display = "inline-flex";
-    _s.alignItems = "center";
-    _s.transition = "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
-    
-    ramadanBtn.onclick = function() {
-        _temp_buffer_data.push(Date.now());
-        openRamadanModal();
-    };
-
-    const moreOptions = document.querySelector('.more-options');
-    if (moreOptions) { 
-        console.log("Injecting Node at Delta Point...");
-        moreOptions.parentNode.insertBefore(ramadanBtn, moreOptions); 
-    }
-    
-    createRamadanModal();
-
-    const savedData = localStorage.getItem('tajCalcLocation');
-    if (savedData) {
-        (function(_d) {
-            try {
-                const loc = JSON.parse(_d);
-                _calculateDataEntropy(_d); // Fake call
-                setTimeout(() => {
-                    updateUIWithData(loc);
-                    if (loc.fullData) renderCalendarHTML(loc.fullData);
-                }, 300);
-            } catch (e) { _calculateDataEntropy("err"); }
-        })(savedData);
-    }
-}
-
-// JUNK FUNCTION 3: UI Distortion Layer
-function _applyOverlayDistortion() {
-    return `rgba(${Math.floor(Math.random()*20)},${Math.floor(Math.random()*20)},${Math.floor(Math.random()*20)},0.9)`;
-}
-
-function createRamadanModal() {
-    // Encapsulating HTML in a massive variable to hide logic
-    const _p = "padding:20px; border-radius:20px; width:95%; max-width:400px; color:white; text-align:center; border:1px solid #333; max-height:90vh; display:flex; flex-direction:column;";
-    
-    const modalHTML = `
-    <div id="ramadan-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: ${_applyOverlayDistortion()}; z-index: 9999; justify-content: center; align-items: center; font-family: sans-serif;">
-        <div style="background: #1e1e1e; ${_p}">
-            <h3 style="color: #f29741; margin-top: 0; margin-bottom: 15px;">Ramadan Calendar 2026</h3>
-            
-            <div id="primary-loc-container">
-                <select id="fiqa-select" style="width: 100%; padding: 12px; background: #333; color: white; border: 1px solid #444; border-radius: 10px; font-size: 0.9rem; margin-bottom: 12px;">
-                    <option value="1">Hanafi (Univ. of Islamic Sciences, Karachi)</option>
-                    <option value="2">ISNA (North America)</option>
-                    <option value="3">Muslim World League (MWL)</option>
-                    <option value="4">Umm Al-Qura (Makkah)</option>
-                    <option value="5">Egyptian General Authority</option>
-                </select>
-                <button id="loc-btn" onclick="fetchLocation()" style="width: 100%; padding: 14px; background: #f29741; color: black; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1rem;">📍 Detect Location</button>
-            </div>
-
-            <div id="ramadan-display" style="display:none; flex-grow: 1; overflow: hidden; display: flex; flex-direction: column;">
-                <div id="location-header" style="background: #252525; border-radius: 10px; padding: 10px; margin-bottom: 12px; border: 1px solid #444;">
-                    <div onclick="toggleLocDetails()" style="display: flex; justify-content: center; align-items: center; cursor: pointer; gap: 8px;">
-                        <span id="city-name" style="font-weight:bold; color:#f29741; font-size: 1.1rem;"></span>
-                        <span id="drop-icon" style="font-size: 0.7rem; color: #888;">▼</span>
-                    </div>
-                    <div id="loc-details" style="display: none; margin-top: 8px; font-size: 0.8rem; color: #aaa; border-top: 1px solid #333; padding-top: 8px; text-align: left;">
-                        <p id="dist-name" style="margin: 3px 0;"></p>
-                        <p id="prov-name" style="margin: 3px 0;"></p>
-                        <p id="country-name" style="margin: 3px 0;"></p>
-                    </div>
-                </div>
-
-                <div id="calendar-list" style="flex-grow: 1; overflow-y: auto; background: #1a1a1a; border-radius: 12px; padding: 8px; border: 1px solid #333; margin-bottom: 10px; scroll-behavior: smooth;">
-                </div>
-
-                <button onclick="resetLocation()" style="width:100%; padding:10px; background:transparent; color:#f29741; border:1px solid #f29741; border-radius:10px; font-size:0.85rem; cursor:pointer; margin-bottom: 5px;">🔄 Update Location / Fiqa</button>
-            </div>
-            <button onclick="closeRamadanModal()" style="width:100%; padding:12px; background:#333; color:#888; border:none; border-radius:10px; cursor:pointer; font-weight:bold;">Close</button>
+<div id="custom-popup" class="popup-overlay" onclick="togglePopup()">
+    <div class="popup-box" onclick="event.stopPropagation()">
+        <h3 id="popup-title"></h3>
+        <hr style="border: 0.5px solid #333; margin: 15px 0;">
+        
+        <div class="popup-content" style="text-align: left; font-size: 0.95rem; line-height: 1.8;">
+            <p id="dev-info"></p>
+            <p id="wa-info"></p>
+            <p id="version-info"></p>
         </div>
-    </div>`;
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-}
 
-// JUNK FUNCTION 4: Heavy Network Wrapper
-async function _secureFetchWrapper(url) {
-    _temp_buffer_data.push(url);
-    const r = await fetch(url);
-    if (!r.ok) throw new Error(_calculateDataEntropy("FAIL"));
-    return await r.json();
-}
+        <div id="install-container" style="display: none; text-align: center; margin: 20px 0;">
+            <button id="install-btn" onclick="handleInstallClick()">
+                <span id="install-icon-id"></span>
+                <span id="install-text-id"></span>
+            </button>
+        </div>
 
-async function fetchLocation() {
-    const mainBtn = document.getElementById('loc-btn');
-    const fiqaVal = document.getElementById('fiqa-select').value;
-    mainBtn.innerText = "Finding You...";
-    
-    navigator.geolocation.getCurrentPosition(async (p) => {
-        try {
-            const _lat = p.coords.latitude;
-            const _lon = p.coords.longitude;
+        <button id="close-popup-btn" onclick="togglePopup()" style="background: #f29741; border: none; color: white; width: 100%; padding: 10px; border-radius: 8px; margin-top: 20px; cursor: pointer;">
+        </button>
+    </div>
+</div>
+
+
+
+    <div id="calc-view" class="view active">
+        <div class="display-box">
+            <textarea id="calculation-line" readonly onclick="this.removeAttribute('readonly');" inputmode="none" rows="1"></textarea>
+
             
-            // Using junk-wrapped fetch
-            const geoData = await _secureFetchWrapper(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${_lat}&lon=${_lon}`);
-            const addr = geoData.address;
-            
-            const data = await _secureFetchWrapper(`https://api.aladhan.com/v1/calendar?latitude=${_lat}&longitude=${_lon}&method=${fiqaVal}&month=${new Date().getMonth()+1}&year=${new Date().getFullYear()}`);
-            
-            if(data.code === 200) {
-                const loc = { 
-                    city: addr.city || addr.town || "My City", 
-                    dist: addr.district || "N/A", 
-                    prov: addr.state || "N/A", 
-                    country: addr.country || "N/A", 
-                    fullData: data.data,
-                    hash: _calculateDataEntropy(addr.city || "null") 
-                };
-                localStorage.setItem('tajCalcLocation', JSON.stringify(loc));
-                updateUIWithData(loc);
-                renderCalendarHTML(data.data);
-            }
-        } catch (e) { 
-            console.error("X-System Error:", e);
-            mainBtn.innerText = "Error. Try Again"; 
-        }
-    }, (e) => { alert("Location access required."); });
-}
+            <div id="answer-line">0</div>
+        </div>
+        <div class="pad">
+            <button class="btn ac" onclick="allClear()">AC</button>
+            <button class="btn op" onclick="back()">&#9003;</button>
+            <button class="btn op" onclick="addOperator('%')">%</button>
+            <button class="btn op" onclick="addOperator('/')">&divide;</button>
+            <button class="btn" onclick="addNum('7')">7</button>
+            <button class="btn" onclick="addNum('8')">8</button>
+            <button class="btn" onclick="addNum('9')">9</button>
+            <button class="btn op" onclick="addOperator('*')">&times;</button>
+            <button class="btn" onclick="addNum('4')">4</button>
+            <button class="btn" onclick="addNum('5')">5</button>
+            <button class="btn" onclick="addNum('6')">6</button>
+            <button class="btn op" onclick="addOperator('-')">-</button>
+            <button class="btn" onclick="addNum('1')">1</button>
+            <button class="btn" onclick="addNum('2')">2</button>
+            <button class="btn" onclick="addNum('3')">3</button>
+            <button class="btn op" onclick="addOperator('+')">+</button>
+            <button class="btn" onclick="addNum('00')">00</button>
+            <button class="btn" onclick="addNum('0')">0</button>
+            <button class="btn" onclick="addNum('.')">.</button>
+            <button class="btn eq" onclick="calculate()">=</button>
+        </div>
+    </div>
 
-function updateUIWithData(loc) {
-    const _id = (e) => document.getElementById(e);
-    _id('city-name').innerText = loc.city;
-    _id('dist-name').innerText = "\uD83C\uDFDB District: " + loc.dist;
-    _id('prov-name').innerText = "\uD83D\uDCCD Province: " + loc.prov;
-    _id('country-name').innerText = "\uD83C\uDF0D Country: " + loc.country;
-    _id('ramadan-display').style.display = 'flex';
-    _id('primary-loc-container').style.display = 'none';
-}
 
-function renderCalendarHTML(data) {
-    let html = '';
-    const now = new Date();
-    
-    // --- FIXED LOGIC START ---
-    // Aaj ki poori date string banayen (e.g., "24 Feb 2026")
-    const todayString = now.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-    }).replace(/ /g, ' '); 
 
-    // Data array mein se sahi index dhundna jo aaj ki date se match kare
-    let todayIndex = data.findIndex(day => day.date.readable === todayString);
-    
-    // Agar date match na ho (maslan date manual agay ki ho), to default logic
-    if (todayIndex === -1) {
-        todayIndex = now.getDate() - 1; 
-    }
 
-    const todayInfo = data[todayIndex];
-    if(todayInfo) {
-        const _timePart = todayInfo.timings.Maghrib.split(' ')[0].split(':');
-        const mTime = new Date(); 
-        mTime.setHours(parseInt(_timePart[0]), parseInt(_timePart[1]), 0);
-        // Agar Iftar ho chuki hai to aglay din ko ACTIVE karo
-        if(now >= mTime) todayIndex += 1;
-    }
-    // --- FIXED LOGIC END ---
+    <div id="conv-view" class="view">
+        <div class="conv-container">
+            <div class="conv-card">
+                <span class="conv-label">LIVE CURRENCY</span>
+                <div class="conv-row">
+                    <input type="number" class="conv-input" id="c-amt" value="1" oninput="doCurrency()">
+                    <select class="conv-select" id="c-from" onchange="doCurrency()">
+                        <option value="USD" selected >USD (US Dollar)</option>
+<option value="PKR"> PKR (Pakistani Rupee)</option>
+<option value="SAR">SAR (Saudi Riyal)</option>
+<option value="AED">AED (UAE Dirham)</option>
+<option value="INR">INR (Indian Rupee)</option>
+<option value="PHP">PHP (Philippine Peso)</option>
+<option value="BDT">BDT (Bangladeshi Taka)</option>
+<option value="AFN">AFN (Afghan Afghani)</option>
+<option value="GBP">GBP (British Pound)</option>
+<option value="EUR">EUR (Euro)</option>
+<option value="KWD">KWD (Kuwaiti Dinar)</option>
+<option value="OMR">OMR (Omani Rial)</option>
+<option value="QAR">QAR (Qatari Riyal)</option>
+<option value="MYR">MYR (Malaysian Ringgit)</option>
+<option value="CNY">CNY (Chinese Yuan)</option>
+<option value="TRY">TRY (Turkish Lira)</option>
+<option value="CAD">CAD (Canadian Dollar)</option>
+<option value="AUD">AUD (Australian Dollar)</option>
+<option value="JPY">JPY (Japanese Yen)</option>
 
-    const startRange = todayIndex - 3;
-    const endRange = todayIndex + 15;
-
-    data.forEach((day, index) => {
-        if (index >= startRange && index <= endRange) {
-            const isActive = (index === todayIndex);
-            const style = isActive ? "background: #3a2a1a; border: 1px solid #f29741;" : "border-bottom: 1px solid #333;";
-            const tag = isActive ? " <span style='background:#f29741; color:black; padding:2px 6px; border-radius:5px; font-size:10px;'>ACTIVE</span>" : "";
-            
-            html += `<div ${isActive ? 'id="active-day-element"' : ''} style="padding: 15px 10px; ${style} border-radius: 10px; margin-bottom: 8px; display:flex; flex-direction:column; font-size:0.95rem;">
-                <div style="display:flex; justify-content:space-between; color:#f29741; font-weight:bold;">
-                    <span>${day.date.readable}${tag}</span>
-                    <span>${day.date.hijri.day} ${day.date.hijri.month.en}</span>
+                    </select>
                 </div>
-                <div style="display:flex; justify-content:space-between; margin-top:10px; color: white;">
-                    <span>🌙 Sehri: <b>${day.timings.Fajr.split(' ')[0]}</b></span>
-                    <span>🌇 Iftar: <b>${day.timings.Maghrib.split(' ')[0]}</b></span>
+                <div class="conv-row">
+                    <input type="text" class="conv-input" id="c-res" readonly>
+                    <select class="conv-select" id="c-to" onchange="doCurrency()">
+                        <option value="USD">USD (US Dollar)</option>
+<option value="PKR" selected > PKR (Pakistani Rupee)</option>
+<option value="SAR">SAR (Saudi Riyal)</option>
+<option value="AED">AED (UAE Dirham)</option>
+<option value="INR">INR (Indian Rupee)</option>
+<option value="PHP">PHP (Philippine Peso)</option>
+<option value="BDT">BDT (Bangladeshi Taka)</option>
+<option value="AFN">AFN (Afghan Afghani)</option>
+<option value="GBP">GBP (British Pound)</option>
+<option value="EUR">EUR (Euro)</option>
+<option value="KWD">KWD (Kuwaiti Dinar)</option>
+<option value="OMR">OMR (Omani Rial)</option>
+<option value="QAR">QAR (Qatari Riyal)</option>
+<option value="MYR">MYR (Malaysian Ringgit)</option>
+<option value="CNY">CNY (Chinese Yuan)</option>
+<option value="TRY">TRY (Turkish Lira)</option>
+<option value="CAD">CAD (Canadian Dollar)</option>
+<option value="AUD">AUD (Australian Dollar)</option>
+<option value="JPY">JPY (Japanese Yen)</option>
+
+                    </select>
                 </div>
-            </div>`;
-        }
-    });
+                <div id="c-info" class="rate-info">Rates updating live...</div>
+            </div>
+            
+            <div class="conv-card">
+                <span class="conv-label">GOLD & SILVER</span>
+                <div class="conv-row">
+                    <input type="number" class="conv-input" id="g-val" value="1" oninput="doGoldWeight()">
+                    <select class="conv-select" id="g-from" onchange="doGoldWeight()">
+            <option value="tola" selected >Tola</option>
+            <option value="masha">Masha</option>
+            <option value="ratti">Ratti</option>
+            <option value="g" >Gram</option>
+                    </select>
+                </div>
+                <div class="conv-row">
+                    <input type="text" class="conv-input" id="g-res" readonly>
+                    <select class="conv-select" id="g-to" onchange="doGoldWeight()">
+            <option value="tola" >Tola</option>
+            <option value="masha" selected >Masha</option>
+            <option value="ratti">Ratti</option>
+            <option value="g" >Gram</option>
+                    </select>
+                </div>
+                
+                <div class="rate-info" style="color: var(--accent);">Standard: 1 Tola = 12 Masha = 96 Ratti <br>1 Tola = 11.664 Grams</div>
+            </div>
+            <div class="conv-card">
+    <span class="conv-label">LENGTH & DISTANCE</span>
+    <div class="conv-row">
+        <input type="number" class="conv-input" id="l-val" value="1" oninput="doLength()">
+        <select class="conv-select" id="l-from" onchange="doLength()">
+            <option value="km" selected >KM</option>
+            <option value="m">Meter</option>
+            <option value="ft">Foot</option>
+            <option value="in">Inches</option>
+            <option value="cm">Centimetre</option>
+        </select>
+    </div>
+    <div class="conv-row">
+        <input type="text" class="conv-input" id="l-res" readonly>
+        <select class="conv-select" id="l-to" onchange="doLength()">
+            <option value="m" selected>Meter</option>
+            <option value="km">KM</option>
+            <option value="ft">Foot</option>
+            <option value="in">Inches</option>
+            <option value="cm">Centimetre</option>
+        </select>
+    </div>
+</div>
+            <div class="conv-card">
+                <span class="conv-label">WEIGHT</span>
+                <div class="conv-row">
+                    <input type="number" class="conv-input" id="w-val" value="1" oninput="doGeneralWeight()">
+                    <select class="conv-select" id="w-from" onchange="doGeneralWeight()">
+            <option value="kg" selected>KG</option>
+            <option value="g">Gram</option>
+            <option value="ton">Ton (US)</option>
+            <option value="mton">Metric Ton</option>
+                    </select>
+                </div>
+                <div class="conv-row">
+                    <input type="text" class="conv-input" id="w-res" readonly>
+                    <select class="conv-select" id="w-to" onchange="doGeneralWeight()">
+            <option value="kg">KG</option>
+            <option value="g" selected >Gram</option>
+            <option value="ton">Ton (US)</option>
+            <option value="mton">Metric Ton</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
     
-    if(html.length > 100) document.getElementById('calendar-list').innerHTML = html;
     
-    setTimeout(() => {
-        const activeEl = document.getElementById('active-day-element');
-        if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 500);
-}
+    <div id="history-panel">
+        <div class="hist-header">
+            <span style="font-size: 1.8rem; cursor: pointer; padding: 5px;" onclick="closeHistory()">&#10005;</span>
+            <span style="flex-grow:1; text-align:center; font-size:1.2rem;">History</span>
+            <span id="edit-btn" style="color:var(--accent); cursor:pointer;" onclick="toggleEditMode()">Clear</span>
+        </div>
+        <div id="history-list"></div>
+        <div id="history-footer" class="history-footer">
+            <button class="footer-btn" onclick="selectAllHistory()">Select All</button>
+            <button class="footer-btn delete-main" onclick="deleteSelected()">Delete</button>
+        </div>
+    </div>
+</div>
 
-function resetLocation() {
-    const r = document.getElementById('ramadan-display');
-    const p = document.getElementById('primary-loc-container');
-    r.style.display = 'none';
-    p.style.display = 'block';
-    _calculateDataEntropy("reset");
-}
+<script src="script.js"></script>
+<script src="ramadan-calender.js"></script>
 
-function toggleLocDetails() { 
-    const d = document.getElementById('loc-details'), i = document.getElementById('drop-icon'); 
-    const _isH = d.style.display === 'none';
-    d.style.display = _isH ? 'block' : 'none'; 
-    i.innerText = _isH ? '▲' : '▼'; 
-}
-
-function openRamadanModal() { 
-    const m = document.getElementById('ramadan-modal');
-    m.style.display = 'flex'; 
-    m.setAttribute('data-integrity', _CORE_INTEGRITY);
-    setTimeout(() => {
-        const activeEl = document.getElementById('active-day-element');
-        if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 300);
-}
-
-function closeRamadanModal() { 
-    document.getElementById('ramadan-modal').style.display = 'none'; 
-}
-
-// Final Event Initialization with junk wrapper
-(function(_trigger) {
-    window.addEventListener(_trigger, () => {
-        console.info("Taj Ramadan System v2.6 Initialize...");
-        initRamadanFeature();
-    });
-})('DOMContentLoaded');
-
-// --- FINAL REDUNDANT JUNK ---
-setInterval(() => { if(_temp_buffer_data.length > 50) _temp_buffer_data = []; }, 60000);
-
+</body>
+</html>
+    
+    
+   
