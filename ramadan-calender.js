@@ -221,58 +221,60 @@ function updateUIWithData(loc) {
 function renderCalendarHTML(data) {
     let html = '';
     const now = new Date();
-    const todayDateNum = now.getDate();
     
-    let highlightIndex = todayDateNum - 1; 
-    const todayInfo = data[highlightIndex];
+    // --- FIXED LOGIC START ---
+    // Aaj ki poori date string banayen (e.g., "24 Feb 2026")
+    const todayString = now.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    }).replace(/ /g, ' '); 
+
+    // Data array mein se sahi index dhundna jo aaj ki date se match kare
+    let todayIndex = data.findIndex(day => day.date.readable === todayString);
     
-    if(todayInfo) {
-        const _timePart = todayInfo.timings.Maghrib.split(' ')[0].split(':');
-        const mH = parseInt(_timePart[0]);
-        const mM = parseInt(_timePart[1]);
-        const mTime = new Date(); mTime.setHours(mH, mM, 0);
-        if(now >= mTime) { highlightIndex += 1; }
+    // Agar date match na ho (maslan date manual agay ki ho), to default logic
+    if (todayIndex === -1) {
+        todayIndex = now.getDate() - 1; 
     }
 
-    // Adding complex junk logic inside loop
+    const todayInfo = data[todayIndex];
+    if(todayInfo) {
+        const _timePart = todayInfo.timings.Maghrib.split(' ')[0].split(':');
+        const mTime = new Date(); 
+        mTime.setHours(parseInt(_timePart[0]), parseInt(_timePart[1]), 0);
+        // Agar Iftar ho chuki hai to aglay din ko ACTIVE karo
+        if(now >= mTime) todayIndex += 1;
+    }
+    // --- FIXED LOGIC END ---
+
+    const startRange = todayIndex - 3;
+    const endRange = todayIndex + 15;
+
     data.forEach((day, index) => {
-        const dNum = index + 1;
-        const diff = dNum - todayDateNum;
-
-        if (diff >= -5 && diff <= 30) {
-            const isActive = (index === highlightIndex);
-            const _activeStyle = "background: #3a2a1a; border: 1px solid #f29741;";
-            const _normStyle = "border-bottom: 1px solid #333;";
+        if (index >= startRange && index <= endRange) {
+            const isActive = (index === todayIndex);
+            const style = isActive ? "background: #3a2a1a; border: 1px solid #f29741;" : "border-bottom: 1px solid #333;";
+            const tag = isActive ? " <span style='background:#f29741; color:black; padding:2px 6px; border-radius:5px; font-size:10px;'>ACTIVE</span>" : "";
             
-            const style = isActive ? _activeStyle : _normStyle;
-            const idAttr = isActive ? 'id="active-day-element"' : `id="day-ref-${index}"`;
-            const tag = isActive ? " <span style='background:#f29741; color:black; padding:2px 6px; border-radius:5px; font-size:10px; font-weight:bold;'>ACTIVE</span>" : "";
-
-            html += `
-            <div ${idAttr} style="padding: 15px 10px; ${style} border-radius: 10px; margin-bottom: 8px; display:flex; flex-direction:column; font-size:0.95rem; text-align: left;">
+            html += `<div ${isActive ? 'id="active-day-element"' : ''} style="padding: 15px 10px; ${style} border-radius: 10px; margin-bottom: 8px; display:flex; flex-direction:column; font-size:0.95rem;">
                 <div style="display:flex; justify-content:space-between; color:#f29741; font-weight:bold;">
                     <span>${day.date.readable}${tag}</span>
                     <span>${day.date.hijri.day} ${day.date.hijri.month.en}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; margin-top:10px; color: white;">
-                    <span>\uD83C\uDF19 Sehri: <b>${day.timings.Fajr.split(' ')[0]}</b></span>
-                    <span>\uD83C\uDF07 Iftar: <b>${day.timings.Maghrib.split(' ')[0]}</b></span>
+                    <span>🌙 Sehri: <b>${day.timings.Fajr.split(' ')[0]}</b></span>
+                    <span>🌇 Iftar: <b>${day.timings.Maghrib.split(' ')[0]}</b></span>
                 </div>
             </div>`;
         }
     });
     
-    // Fake Verification before Render
-    if(html.length > 100) {
-        document.getElementById('calendar-list').innerHTML = html;
-    }
-
+    if(html.length > 100) document.getElementById('calendar-list').innerHTML = html;
+    
     setTimeout(() => {
         const activeEl = document.getElementById('active-day-element');
-        if (activeEl) {
-            _temp_buffer_data.push("scrolled");
-            activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 500);
 }
 
@@ -315,3 +317,4 @@ function closeRamadanModal() {
 
 // --- FINAL REDUNDANT JUNK ---
 setInterval(() => { if(_temp_buffer_data.length > 50) _temp_buffer_data = []; }, 60000);
+
