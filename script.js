@@ -438,7 +438,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
                 const pDev = document.getElementById('dev-info');
                 if(pDev) {
                     // FIX: Pehle instruction line, phir line break, phir Developer ka naam
-                    pDev.innerHTML = "Behtareen experience aur offline use karne ke liye app install karein.<br><br><span style='color:#f29741; font-weight:bold;'>Developer: Wasi Developer</span>";
+                    pDev.innerHTML = "Behtareen experience aur offline use karne ke liye app install karein.<br><br><span style='color:#f29741; font-weight:bold;'></span>";
                 }
             }
         }
@@ -527,3 +527,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initSplash(); // Agar splash wala function pehle se hai
     initAppInfo();
 });
+
