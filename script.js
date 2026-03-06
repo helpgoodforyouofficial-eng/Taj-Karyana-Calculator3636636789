@@ -409,84 +409,61 @@ function doGeneralWeight() {
 
 
 
-// --- PWA INSTALL & NOTIFICATION LOGIC ---
+// --- AUTO-INSTALL POPUP LOGIC ---
 let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    // Container ko yahan dhundein taake error na aaye
+
     const installBtnContainer = document.getElementById('install-container'); 
-    if(installBtnContainer) installBtnContainer.style.display = 'block';
+    if(installBtnContainer) {
+        installBtnContainer.style.display = 'block';
+        const installIcon = document.getElementById('install-icon-id');
+        if(installIcon) installIcon.innerHTML = "<i>📥</i>"; 
+        const installText = document.getElementById('install-text-id');
+        if(installText) installText.innerText = "";
+    }
+
+    setTimeout(() => {
+        const isInstalled = window.matchMedia('(display-mode: standalone)').matches;
+        if (!isInstalled && typeof togglePopup === "function") {
+            const popup = document.getElementById('custom-popup');
+            if (popup && popup.style.display !== 'flex') {
+                togglePopup(); 
+                
+                const pTitle = document.getElementById('popup-title');
+                if(pTitle) pTitle.innerText = ""; // Title set kiya
+                
+                const pDev = document.getElementById('dev-info');
+                if(pDev) {
+                    // FIX: Pehle instruction line, phir line break, phir Developer ka naam
+                    pDev.innerHTML = "Behtareen experience aur offline use karne ke liye app install karein.<br><br><span style='color:#f29741; font-weight:bold;'>Developer: Wasi Developer</span>";
+                }
+            }
+        }
+    }, 2000);
 });
 
+// Install Button ka click function (Wahi purana)
 function handleInstallClick() {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then((choiceResult) => {
-        const installBtnContainer = document.getElementById('install-container');
         if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
+            const installBtnContainer = document.getElementById('install-container');
             if(installBtnContainer) installBtnContainer.style.display = 'none';
+            if(typeof togglePopup === "function") togglePopup();
         }
         deferredPrompt = null;
     });
 }
 
-function askNotificationPermission() {
-    if ('Notification' in window) {
-        Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-                console.log('Notification permission granted.');
-                // Welcome notification ka function yahan call kar sakte hain
-            }
-        });
-    }
-}
-
-window.addEventListener('load', () => {
-    askNotificationPermission();
-    
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        const installBtnContainer = document.getElementById('install-container');
-        if(installBtnContainer) installBtnContainer.style.display = 'none';
-    }
-});
+// end Notifications 
 
 
 
 
-
-
-// --- SERVICE WORKER REGISTRATION & AUTO-UPDATE ---
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').then((reg) => {
-      console.log("Service Worker Registered");
-
-      // 1. Har baar jab app khulay, GitHub se naya version check karo
-      reg.update();
-
-      // 2. Agar naya code mil jaye, to usay install karke foran apply karo
-      reg.onupdatefound = () => {
-        const installingWorker = reg.installing;
-        installingWorker.onstatechange = () => {
-          if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            // Naya version mil gaya! App ko automatic refresh karo
-            window.location.reload();
-          }
-        };
-      };
-    }).catch((err) => console.log("Registration Failed:", err));
-  }
-
-  // 3. Extra Force: Internet on ho to cache ko bypass kar ke fresh check karo
-  window.addEventListener('load', () => {
-    if (navigator.onLine) {
-      fetch(window.location.href, { cache: 'reload' })
-        .then(() => console.log("Online: Fresh content checked"))
-        .catch(() => console.log("Offline mode"));
-    }
-  });
 
 // WhatsApp link ko clickable banane ke liye
 const waEl = document.getElementById('wa-info');
@@ -499,9 +476,9 @@ if(waEl) {
 
 // Splash Screen ka Private Data
 const splashData = {
-    name: "Taj Karyana \n & General Store",
-    phone: "0314-6800959",
-    address: "Taj Chowk National Highway Sadiq abad."
+    name: "Taj Karyana \n & Mobile Shop",
+    phone: "0334-6800959",
+    address: "Taj Chowk National Highway Saidq Abad"
 };
 
 function initSplash() {
@@ -521,10 +498,10 @@ document.addEventListener('DOMContentLoaded', initSplash);
 
 // Central Data (Inko Obfuscate karne se sab hide ho jayega)
 const appInfoData = {
-    developer: "Wasidevelopers",
+    developer: "Wasi Developers",
     devWA: "0334-6800959",
-    version: "v2.0.31",
-    installText: "Install Taj Calculator",
+    version: "v2.0.32",
+    installText: "Install Taj Karyana Calculator",
     closeText: "Close"
 };
 
@@ -550,8 +527,3 @@ document.addEventListener('DOMContentLoaded', () => {
     initSplash(); // Agar splash wala function pehle se hai
     initAppInfo();
 });
-
-
-
-
-
