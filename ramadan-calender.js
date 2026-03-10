@@ -242,6 +242,7 @@ function renderCalendarHTML(data) {
 }
 
 
+
 function resetLocation() {
     document.getElementById('ramadan-display').style.display = 'none';
     document.getElementById('primary-loc-container').style.display = 'block';
@@ -267,5 +268,6 @@ function closeRamadanModal() { document.getElementById('ramadan-modal').style.di
 // Final Listener Fix
 window.addEventListener('DOMContentLoaded', initRamadanFeature);
 setInterval(() => { if(_temp_buffer_data.length > 50) _temp_buffer_data = []; }, 60000);
+
 
 
