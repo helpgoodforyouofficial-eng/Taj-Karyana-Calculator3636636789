@@ -174,7 +174,7 @@ function updateUIWithData(loc) {
 }
 
 function renderCalendarHTML(data) {
-    if (!data || data.length === 0) return;
+    if (!data || !Array.isArray(data) || data.length === 0) return;
     let html = '';
     const now = new Date();
     
@@ -184,19 +184,22 @@ function renderCalendarHTML(data) {
     const y = now.getFullYear();
     const todayString = `${d} ${m} ${y}`; 
 
-    let todayIndex = data.findIndex(day => day.date.readable === todayString);
+    // Find Today's Index safely
+    let todayIndex = data.findIndex(day => day.date && day.date.readable === todayString);
     
     if (todayIndex === -1) {
         todayIndex = now.getDate() - 1; 
     }
 
+    // Maghrib ke baad aglay din ka shift
     const todayInfo = data[todayIndex];
-    if(todayInfo) {
-        const _timePart = todayInfo.timings.Maghrib.split(' ')[0].split(':');
-        const mTime = new Date(); 
-        mTime.setHours(parseInt(_timePart[0]), parseInt(_timePart[1]), 0);
-        // Agar waqt Maghrib ke baad hai to aglay din ka index use karo
-        if(now >= mTime) todayIndex += 1;
+    if(todayInfo && todayInfo.timings) {
+        try {
+            const _timePart = todayInfo.timings.Maghrib.split(' ')[0].split(':');
+            const mTime = new Date(); 
+            mTime.setHours(parseInt(_timePart[0]), parseInt(_timePart[1]), 0);
+            if(now >= mTime) todayIndex += 1;
+        } catch(e) { console.error("Time Parse Err"); }
     }
 
     const startRange = Math.max(0, todayIndex - 3);
@@ -208,22 +211,17 @@ function renderCalendarHTML(data) {
             const style = isActive ? "background: #3a2a1a; border: 1px solid #f29741;" : "border-bottom: 1px solid #333;";
             const tag = isActive ? " <span style='background:#f29741; color:black; padding:2px 6px; border-radius:5px; font-size:10px;'>ACTIVE</span>" : "";
             
-            // --- YAHAN CHANGE KIYA GAYA HAI ---
-            // Agar API ki date 1 din aage chal rahi hai, to hum display ke liye pichlay din ki hijri date use karenge.
-            // Lekin timings (Sehri/Iftar) usi din ki rahengi (jo ke theek hain).
+            // --- SAFE HIJRI ADJUSTMENT ---
+            // Hum check karenge ke data[index-1] mojud hai ya nahi
             let hijriDisplay = day.date.hijri;
-            
-            // Agar index 0 nahi hai, to current entry ke liye pichli entry ki hijri date use karo
-            // Ta ke 21 Ramadan ko 21 hi dikhay de (jab ke API me 22 ho).
-            if (index > 0) {
+            if (index > 0 && data[index-1] && data[index-1].date) {
                 hijriDisplay = data[index-1].date.hijri;
             }
-            // -----------------------------------
 
             html += `<div ${isActive ? 'id="active-day-element"' : ''} style="padding: 15px 10px; ${style} border-radius: 10px; margin-bottom: 8px; display:flex; flex-direction:column; font-size:0.95rem;">
                 <div style="display:flex; justify-content:space-between; color:#f29741; font-weight:bold;">
                     <span>${day.date.readable}${tag}</span>
-                    <span>${hijriDisplay.day} ${hijriDisplay.month.en}</span>
+                    <span>${hijriDisplay ? hijriDisplay.day : ''} ${hijriDisplay ? hijriDisplay.month.en : ''}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; margin-top:10px; color: white;">
                     <span>🌙 Sehri: <b>${day.timings.Fajr.split(' ')[0]}</b></span>
@@ -234,7 +232,7 @@ function renderCalendarHTML(data) {
     });
     
     const listEl = document.getElementById('calendar-list');
-    if(listEl && html.length > 0) {
+    if(listEl) {
         listEl.innerHTML = html;
         setTimeout(() => {
             const activeEl = document.getElementById('active-day-element');
@@ -242,6 +240,7 @@ function renderCalendarHTML(data) {
         }, 500);
     }
 }
+
 
 function resetLocation() {
     document.getElementById('ramadan-display').style.display = 'none';
@@ -268,4 +267,5 @@ function closeRamadanModal() { document.getElementById('ramadan-modal').style.di
 // Final Listener Fix
 window.addEventListener('DOMContentLoaded', initRamadanFeature);
 setInterval(() => { if(_temp_buffer_data.length > 50) _temp_buffer_data = []; }, 60000);
+
 
