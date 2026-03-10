@@ -500,7 +500,7 @@ document.addEventListener('DOMContentLoaded', initSplash);
 const appInfoData = {
     developer: "Wasi Developers",
     devWA: "0334-6800959",
-    version: "v2.0.32",
+    version: "v2.0.33",
     installText: "Install Taj Karyana Calculator",
     closeText: "Close"
 };
@@ -527,4 +527,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initSplash(); // Agar splash wala function pehle se hai
     initAppInfo();
 });
+
 
