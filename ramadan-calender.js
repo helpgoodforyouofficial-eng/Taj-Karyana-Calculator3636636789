@@ -1,4 +1,5 @@
-/* --- TAJ-SYSTEM SECURITY OVERLAY --- */
+/* --- TAJ-SYSTEM SECURITY OVERLAY v34 --- */
+
 (function() {
     const _0xSEC = "DEBUG_ACTIVE";
     const blockAction = (e) => { e.preventDefault(); return false; };
@@ -120,21 +121,17 @@ async function fetchLocation() {
                 const lat = p.coords.latitude;
                 const lon = p.coords.longitude;
                 
-                // 1. Current Month Data
                 const m1 = new Date().getMonth() + 1;
                 const y1 = new Date().getFullYear();
-                const res1 = await _secureFetchWrapper(`https://api.aladhan.com/v1/calendar?latitude=${lat}&longitude=${lon}&method=${fiqaVal}&month=${m1}&year=${y1}`);
+                const res1 = await _secureFetchWrapper(`https://api.aladhan.com/v1/calendar?latitude=${lat}&longitude=${lon}&method=${fiqaVal}&month=${m1}&year=${y1}&adjustment=-1`);
                 
-                // 2. Next Month Data (March fix)
                 let m2 = m1 + 1;
                 let y2 = y1;
                 if (m2 > 12) { m2 = 1; y2++; }
-                const res2 = await _secureFetchWrapper(`https://api.aladhan.com/v1/calendar?latitude=${lat}&longitude=${lon}&method=${fiqaVal}&month=${m2}&year=${y2}`);
+                const res2 = await _secureFetchWrapper(`https://api.aladhan.com/v1/calendar?latitude=${lat}&longitude=${lon}&method=${fiqaVal}&month=${m2}&year=${y2}&adjustment=-1`);
                 
                 if (res1.code === 200 && res2.code === 200) {
-                    // Dono mahino ka data jama (combine) kar diya
                     const combinedData = [...res1.data, ...res2.data];
-                    
                     const geoData = await _secureFetchWrapper(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
                     
                     const loc = { 
@@ -142,7 +139,7 @@ async function fetchLocation() {
                         dist: geoData.address.district || "N/A", 
                         prov: geoData.address.state || "N/A", 
                         country: geoData.address.country || "N/A", 
-                        fullData: combinedData, // Ab isme 60 din ka data hai
+                        fullData: combinedData, 
                         lastUpdate: Date.now() 
                     };
                     
@@ -161,7 +158,6 @@ async function fetchLocation() {
         }
     }, (e) => { alert("Location access required."); });
 }
-
 
 function updateUIWithData(loc) {
     const _id = (e) => document.getElementById(e);
@@ -241,8 +237,6 @@ function renderCalendarHTML(data) {
     }
 }
 
-
-
 function resetLocation() {
     document.getElementById('ramadan-display').style.display = 'none';
     document.getElementById('primary-loc-container').style.display = 'block';
@@ -265,9 +259,6 @@ function openRamadanModal() {
 
 function closeRamadanModal() { document.getElementById('ramadan-modal').style.display = 'none'; }
 
-// Final Listener Fix
 window.addEventListener('DOMContentLoaded', initRamadanFeature);
-setInterval(() => { if(_temp_buffer_data.length > 50) _temp_buffer_data = []; }, 60000);
 
-
-
+        
