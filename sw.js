@@ -1,4 +1,4 @@
-const cacheName = 'taj-calc-v32'; // Version updated for fresh sync
+const cacheName = 'taj-calc-v33';
 const assets = [
   './',
   './index.html',
@@ -6,29 +6,25 @@ const assets = [
   './script.js',
   './ramadan-calender.js',
   './manifest.json',
-  './logo.png',   // Logo download list mein shamil
-  './icon.png'    // Icon download list mein shamil
+  './logo.png',
+  './icon.png'
 ];
 
-// 1. Install Event: Sab kuch download karlo
+// 1. Install Event: Har file ko independent download karein
 self.addEventListener('install', e => {
   self.skipWaiting();
   e.waitUntil(
     caches.open(cacheName).then(cache => {
-      console.log('Taj-System: Caching Images & Files...');
-      return Promise.all(
-        assets.map(url => {
-          return fetch(url).then(response => {
-            if (!response.ok) throw new Error('File not found: ' + url);
-            return cache.put(url, response);
-          }).catch(err => console.log('Offline Alert: ', err.message));
-        })
+      console.log('Taj-System: Syncing Assets...');
+      // Individually add files taake aik fail ho to baaqi ho jayen
+      return Promise.allSettled(
+        assets.map(url => cache.add(url))
       );
     })
   );
 });
 
-// 2. Activate: Purana cache clear
+// 2. Activate: Purana kachra saaf
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys => {
@@ -40,30 +36,26 @@ self.addEventListener('activate', e => {
   return self.clients.claim();
 });
 
-// 3. Fetch: Instant Offline Access
+// 3. Fetch: Cache-First Strategy (Best for Offline)
 self.addEventListener('fetch', e => {
   e.respondWith(
     caches.match(e.request).then(cachedResponse => {
-      // Agar cache mein file mil gayi (logo/icon/html), to internet ki zarurat nahi
+      // 1. Agar cache mein hai to wahin se uthao
       if (cachedResponse) return cachedResponse;
 
+      // 2. Agar nahi hai to internet se fetch karo
       return fetch(e.request).then(networkResponse => {
         if(networkResponse && networkResponse.status === 200) {
             const responseClone = networkResponse.clone();
             caches.open(cacheName).then(cache => cache.put(e.request, responseClone));
         }
         return networkResponse;
-      });
-    }).catch(() => {
+      }).catch(() => {
+        // 3. Agar net bhi nahi aur cache bhi nahi, to main page dikhao
         if (e.request.mode === 'navigate') {
           return caches.match('./index.html');
         }
+      });
     })
   );
 });
-
-
-
-
-
-
