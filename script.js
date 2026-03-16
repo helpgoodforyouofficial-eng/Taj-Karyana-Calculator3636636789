@@ -42,6 +42,18 @@
 
 
 
+// --- SERVICE WORKER REGISTRATION ---
+// Ye code aap ki main script.js file ke start ya end mein hona chahiye
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js') // Ye sw.js file ka naam hai
+            .then(reg => console.log('Service Worker: Registered Successfully'))
+            .catch(err => console.log('Service Worker: Registration Failed', err));
+    });
+}
+
+
+
 // --- 1. Master Expiry Logic (Calculator Block) ---
 const masterExpiry = "2027-02-20"; 
 
