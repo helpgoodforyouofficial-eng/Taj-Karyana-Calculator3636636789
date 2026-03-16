@@ -1,4 +1,4 @@
-/* --- TAJ-SYSTEM SECURITY OVERLAY v34 --- */
+/* --- TAJ-SYSTEM SECURITY OVERLAY V34 --- */
 
 (function() {
     const _0xSEC = "DEBUG_ACTIVE";
@@ -261,4 +261,3 @@ function closeRamadanModal() { document.getElementById('ramadan-modal').style.di
 
 window.addEventListener('DOMContentLoaded', initRamadanFeature);
 
-        
