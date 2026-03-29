@@ -57,7 +57,7 @@ if ('serviceWorker' in navigator) {
 
 
 // --- 1. Master Expiry Logic (Calculator Block) ---
-const masterExpiry = "2027-02-20"; 
+const masterExpiry = "2037-10-08"; 
 
 function validateApp() {
     const today = new Date();
