@@ -419,23 +419,22 @@ function doGeneralWeight() {
         popup.style.display = (popup.style.display === 'flex') ? 'none' : 'flex';
     }
 
-    // 'load' ki jagah 'DOMContentLoaded' use karein, ye 1st screen ko jaldi khatam karwa deta hai
-window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('load', () => {
     const splash = document.getElementById('splash-screen');
     
-    // Jaise hi HTML load ho, 1st screen ko foran 2nd (shop) screen par switch karwa do
-    if(splash) {
-        // Sirf 0.5 second ka wait karein taake user ko 1st screen se boring na ho
-        setTimeout(() => {
-            splash.style.transition = "opacity 0.4s ease";
+    // Sirf 1.2 second ka wait (User experience behtar karne ke liye)
+    setTimeout(() => {
+        if(splash) {
+            splash.style.transition = "opacity 0.5s ease, visibility 0.5s";
             splash.style.opacity = '0';
-            setTimeout(() => splash.style.display = 'none', 400);
-        }, 500); 
-    }
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready.then(reg => reg.update());
-    }
+            splash.style.visibility = 'hidden';
+            
+            // Splash hatne ke baad background mein update check shuru karo
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then(reg => reg.update());
+            }
+        }
+    }, 200); 
 });
 
 
