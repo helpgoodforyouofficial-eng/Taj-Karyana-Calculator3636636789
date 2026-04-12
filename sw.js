@@ -1,6 +1,6 @@
 // sw.js file ka code
 
-const cacheName = 'taj-calc-v37';
+const cacheName = 'taj-calc-v38';
 const assets = [
   './',
   './index.html',
