@@ -425,7 +425,7 @@ function doGeneralWeight() {
     // Sirf 1.2 second ka wait (User experience behtar karne ke liye)
     setTimeout(() => {
         if(splash) {
-            splash.style.transition = "opacity 0.5s ease, visibility 0.5s";
+            splash.style.transition = "opacity 0.3s ease, visibility 0.3s";
             splash.style.opacity = '0';
             splash.style.visibility = 'hidden';
             
@@ -434,7 +434,7 @@ function doGeneralWeight() {
                 navigator.serviceWorker.ready.then(reg => reg.update());
             }
         }
-    }, 1200); 
+    }, 500); 
 });
 
 
