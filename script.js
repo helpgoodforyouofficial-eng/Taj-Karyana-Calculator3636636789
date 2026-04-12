@@ -434,7 +434,7 @@ function doGeneralWeight() {
                 navigator.serviceWorker.ready.then(reg => reg.update());
             }
         }
-    }, 500); 
+    }, 100); 
 });
 
 
