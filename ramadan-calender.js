@@ -123,12 +123,12 @@ async function fetchLocation() {
                 
                 const m1 = new Date().getMonth() + 1;
                 const y1 = new Date().getFullYear();
-                const res1 = await _secureFetchWrapper(`https://api.aladhan.com/v1/calendar?latitude=${lat}&longitude=${lon}&method=${fiqaVal}&month=${m1}&year=${y1}&adjustment=-1`);
+                const res1 = await _secureFetchWrapper(`https://api.aladhan.com/v1/calendar?latitude=${lat}&longitude=${lon}&method=${fiqaVal}&month=${m1}&year=${y1}&adjustment=0`);
                 
                 let m2 = m1 + 1;
                 let y2 = y1;
                 if (m2 > 12) { m2 = 1; y2++; }
-                const res2 = await _secureFetchWrapper(`https://api.aladhan.com/v1/calendar?latitude=${lat}&longitude=${lon}&method=${fiqaVal}&month=${m2}&year=${y2}&adjustment=-1`);
+                const res2 = await _secureFetchWrapper(`https://api.aladhan.com/v1/calendar?latitude=${lat}&longitude=${lon}&method=${fiqaVal}&month=${m2}&year=${y2}&adjustment=0`);
                 
                 if (res1.code === 200 && res2.code === 200) {
                     const combinedData = [...res1.data, ...res2.data];
